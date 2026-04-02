@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Schibsted_Grotesk, Martian_Mono, Geist } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import LightRays from "./components/LightRays";
 import Navbar from "./components/navbar";
 
@@ -37,19 +36,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn(
-        schibstedGrotesk.variable,
-        martianMono.variable,
-        geist.variable,
-      )}
-    >
-      <body
-        className={cn(
-          "min-h-screen antialiased font-sans bg-background text-foreground",
-        )}
-      >
+    <html lang="en">
+      <body>
         <Navbar />
         {/* Background effect */}
         <div className="fixed inset-0 z-[-1]">
