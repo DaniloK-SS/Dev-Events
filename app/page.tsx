@@ -1,9 +1,26 @@
 import React from "react";
-import ExploreBtn from "./components/ExploreBtn";
-import EventCard from "./components/EventCard";
-import { events } from "@/lib/constants";
+import ExploreBtn from "../components/ExploreBtn";
+import EventCard from "../components/EventCard";
+import { IEvent } from "@/database/event.model";
 
-const page = () => {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const page = async () => {
+  let events: IEvent[] = [];
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/events`, {
+      next: { revalidate: 60 },
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      events = data.events;
+    }
+  } catch (error) {
+    console.error("Failed to fetch events:", error);
+  }
+
   return (
     <>
       <section>
@@ -17,9 +34,13 @@ const page = () => {
       </section>
       <ExploreBtn />
       <div id="events" className="events mt-7">
-        {events.map((event) => (
-          <EventCard key={event.title} {...event} />
-        ))}
+        {events.length > 0 ? (
+          events.map((event: IEvent) => (
+            <EventCard key={event.slug} {...event} />
+          ))
+        ) : (
+          <p className="text-center">No events found.</p>
+        )}
       </div>
     </>
   );
